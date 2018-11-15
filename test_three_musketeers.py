@@ -92,24 +92,35 @@ def test_has_some_legal_move_somewhere():
     # with at least one additional board
 
 def test_possible_moves_from():
-    # Replace with tests
+    set_board(new_board)
+    assert possible_moves_from((0,0)) == [right,down]
 
 def test_is_legal_location():
-    # Replace with tests
+    set_board(new_board)
+    assert is_legal_location((0,0)) == True
 
 def test_is_within_board():
-    # Replace with tests
+    set_board(new_board)
+    assert is_within_board((0,0),down) == True
 
 def test_all_possible_moves_for():
-    # Replace with tests
+    set_board(new_board)
+    assert all_possible_moves_for(m) == [((0,4),left),((0,4),down),
+                                         ((2,2),down),((2,2),left),((2,2),right),((2,2),up),
+                                         ((4,0),up),((4,0),right)]
+                                          
     
 def test_make_move():
-    # Replace with tests
+    set_board(new_board)
+    assert make_move((0,0), right) == (0,1)
     
 def test_choose_computer_move():
-    # Replace with tests; should work for both 'M' and 'R'
+    set_board(new_board)
+    assert choose_computer_move(m) == ((0,0),right)
 
 def test_is_enemy_win():
-    # Replace with tests
+    set_board(new_board)
+    assert is_enemy_win() == False
+    
 
 
