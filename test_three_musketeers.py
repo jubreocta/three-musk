@@ -15,6 +15,16 @@ board1 =  [ [_, _, _, M, _],
             [_, R, _, _, _],
             [_, _, _, R, _] ]
 
+m = 'M'
+r = 'R'
+board = [ [r, r, r, r, m],
+          [r, r, r, r, r],
+          [r, r, m, r, r],
+          [r, r, r, r, r],
+          [m, r, r, r, r] ]
+
+
+
 def test_create_board():
     create_board()
     assert at((0,0)) == R
@@ -46,11 +56,11 @@ def test_location_to_string():
     assert location_to_string((0,0)) == 'A1'
     
 def test_at():
-    set_board(new_board)
+    set_board(board)
     assert at((0,0)) == r
 
 def test_all_locations():
-    set_board(new_board)
+    set_board(board)
     #creating a list of tuples of all locations
     al=[]
     for i in range(5):
@@ -60,28 +70,28 @@ def test_all_locations():
     assert all_locations() == al
 
 def test_adjacent_location():
-    set_board(new_board)
+    set_board(board)
     assert adjacent_location((0,0),right)== (0,1)
     
     
 def test_is_legal_move_by_musketeer():
-    set_board(new_board)
+    set_board(board)
     with pytest.raises(ValueError):
         at((0,0))
     assert is_legal_move_by_musketeer((0,4),down)== True
     
 def test_is_legal_move_by_enemy():
-    set_board(new_board)
+    set_board(board)
     with pytest.raises(ValueError):
         at((0,4))
     assert is_legal_move_by_enemy((0,0),down)== True
     
 def test_is_legal_move():
-    set_board(new_board)
+    set_board(board)
     assert is_legal_move((0,1),down) == True
 
 def test_can_move_piece_at():
-    set_board(new_board)
+    set_board(board)
     assert can_move_piece_at((0,0)) == True
 
 def test_has_some_legal_move_somewhere():
@@ -92,34 +102,34 @@ def test_has_some_legal_move_somewhere():
     # with at least one additional board
 
 def test_possible_moves_from():
-    set_board(new_board)
+    set_board(board)
     assert possible_moves_from((0,0)) == [right,down]
 
 def test_is_legal_location():
-    set_board(new_board)
+    set_board(board)
     assert is_legal_location((0,0)) == True
 
 def test_is_within_board():
-    set_board(new_board)
+    set_board(board)
     assert is_within_board((0,0),down) == True
 
 def test_all_possible_moves_for():
-    set_board(new_board)
+    set_board(board)
     assert all_possible_moves_for(m) == [((0,4),left),((0,4),down),
                                          ((2,2),down),((2,2),left),((2,2),right),((2,2),up),
                                          ((4,0),up),((4,0),right)]
                                           
     
 def test_make_move():
-    set_board(new_board)
+    set_board(board)
     assert make_move((0,0), right) == (0,1)
     
 def test_choose_computer_move():
-    set_board(new_board)
+    set_board(board)
     assert choose_computer_move(m) == ((0,0),right)
 
 def test_is_enemy_win():
-    set_board(new_board)
+    set_board(board)
     assert is_enemy_win() == False
     
 
