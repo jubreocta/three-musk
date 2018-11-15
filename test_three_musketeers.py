@@ -41,13 +41,23 @@ def test_string_to_location():
     #test with correct inputs
 
 def test_location_to_string():
-    # Replace with tests
-
+    with pytest.raises(ValueError):
+        location_to_string('X3')
+    assert location_to_string((0,0)) == 'A1'
+    
 def test_at():
-    # Replace with tests
+    set_board(board1)
+    assert at((0,0)) == _
 
 def test_all_locations():
-    # Replace with tests
+    set_board(board1)
+    #creating a list of tuples of all locations
+    al=[]
+    for i in range(5):
+        for j in range(5):
+            al.append((i,j))
+        
+    assert all_locations() == al
 
 def test_adjacent_location():
     # Replace with tests
