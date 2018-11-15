@@ -46,11 +46,11 @@ def test_location_to_string():
     assert location_to_string((0,0)) == 'A1'
     
 def test_at():
-    set_board(board1)
-    assert at((0,0)) == _
+    set_board(new_board)
+    assert at((0,0)) == r
 
 def test_all_locations():
-    set_board(board1)
+    set_board(new_board)
     #creating a list of tuples of all locations
     al=[]
     for i in range(5):
@@ -60,19 +60,29 @@ def test_all_locations():
     assert all_locations() == al
 
 def test_adjacent_location():
-    # Replace with tests
+    set_board(new_board)
+    assert adjacent_location((0,0),right)== (0,1)
+    
     
 def test_is_legal_move_by_musketeer():
-    # Replace with tests
+    set_board(new_board)
+    with pytest.raises(ValueError):
+        at((0,0))
+    assert is_legal_move_by_musketeer((0,4),down)== True
     
 def test_is_legal_move_by_enemy():
-    # Replace with tests
-
+    set_board(new_board)
+    with pytest.raises(ValueError):
+        at((0,4))
+    assert is_legal_move_by_enemy((0,0),down)== True
+    
 def test_is_legal_move():
-    # Replace with tests
+    set_board(new_board)
+    assert is_legal_move((0,1),down) == True
 
 def test_can_move_piece_at():
-    # Replace with tests
+    set_board(new_board)
+    assert can_move_piece_at((0,0)) == True
 
 def test_has_some_legal_move_somewhere():
     set_board(board1)
