@@ -77,7 +77,7 @@ def test_adjacent_location():
 def test_is_legal_move_by_musketeer():
     set_board(board)
     with pytest.raises(ValueError):
-        at((0,0))
+        is_legal_move_by_musketeer((0,0), down)
     assert is_legal_move_by_musketeer((0,4),down)== True
     
 def test_is_legal_move_by_enemy():
