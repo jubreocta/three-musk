@@ -42,7 +42,7 @@ def string_to_location(s):
        is outside of the correct range (between 'A' and 'E' for s[0] and
        between '1' and '5' for s[1]
        """
-    if ord(s[0])-ord('A')>4 or int(s[1])>5:
+    if ord(s[0])-ord('A')>4 or int(s[1])>5 or 1>int(s[1]) or 0>ord(s[0])-ord('A') or len(s)>2:
         raise ValueError
     else:    
         return (ord(s[0])-ord('A'),int(s[1])-1)
@@ -52,7 +52,12 @@ def location_to_string(location):
     Similarly to the previous function, this function should raise
     ValueError exception if the input is outside of the correct range
     """
-    return ''
+    if type(location)!=tuple or len(location)>2:
+        raise ValueError
+    if location[0]<0 or location[1]<0 or location[0]>4 or location[0]>4:
+        raise ValueError
+    else:
+        return chr(location[0]+ord('A'))+ str(location[1]+1)
 
 def at(location):
     """Returns the contents of the board at the given location.
@@ -61,14 +66,26 @@ def at(location):
 
 def all_locations():
     """Returns a list of all 25 locations on the board."""
-    return []
+    al=[]
+    for i in range(5):
+        for j in range(5):
+            al.append((i,j))
+    return al
 
 def adjacent_location(location, direction):
     """Return the location next to the given one, in the given direction.
        Does not check if the location returned is legal on a 5x5 board.
        You can assume that input will always be in correct range."""
     (row, column) = location
-    return (0,0)
+    if direction=='up':
+        row-=1
+    if direction=='down':
+        row+=1
+    if direction=='left':
+        column-=1
+    if direction=='right':
+        column+=1
+    return (row,column)
 
 def is_legal_move_by_musketeer(location, direction):
     """Tests if the Musketeer at the location can move in the direction.
