@@ -42,7 +42,10 @@ def string_to_location(s):
        is outside of the correct range (between 'A' and 'E' for s[0] and
        between '1' and '5' for s[1]
        """
-    return (0,0)
+    if ord(s[0])-ord('A')>4 or int(s[1])>5:
+        raise ValueError
+    else:    
+        return (ord(s[0])-ord('A'),int(s[1])-1)
 
 def location_to_string(location):
     """Returns the string representation of a location.
