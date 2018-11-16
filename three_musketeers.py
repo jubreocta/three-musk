@@ -91,19 +91,49 @@ def is_legal_move_by_musketeer(location, direction):
     """Tests if the Musketeer at the location can move in the direction.
     You can assume that input will always be in correct range. Raises
     ValueError exception if at(location) is not 'M'"""
-    return True
+    if at(location)!='M':
+        raise ValueError
+    else:
+        if adjacent_location(location, direction)[0]<0 or\
+        adjacent_location(location, direction)[0]>4 or\
+        adjacent_location(location, direction)[1]<0 or\
+        adjacent_location(location, direction)[1]>4:
+            return False
+        else:
+            if at(adjacent_location(location, direction))== 'R':
+                return True
+            else:
+                return False
 
 def is_legal_move_by_enemy(location, direction):
     """Tests if the enemy at the location can move in the direction.
     You can assume that input will always be in correct range. Raises
     ValueError exception if at(location) is not 'R'"""
-    return True
+    if at(location)!='R':
+        raise ValueError
+    else:
+        if adjacent_location(location, direction)[0]<0 or\
+        adjacent_location(location, direction)[0]>4 or\
+        adjacent_location(location, direction)[1]<0 or\
+        adjacent_location(location, direction)[1]>4:
+            return False
+        else:
+            if at(adjacent_location(location, direction))== '-':
+                return True
+            else:
+                return False
 
 def is_legal_move(location, direction):
     """Tests whether it is legal to move the piece at the location
     in the given direction.
     You can assume that input will always be in correct range."""
-    return True
+    if adjacent_location(location, direction)[0]<0 or\
+        adjacent_location(location, direction)[0]>4 or\
+        adjacent_location(location, direction)[1]<0 or\
+        adjacent_location(location, direction)[1]>4:
+            return False
+    else:
+        return True
 
 def can_move_piece_at(location):
     """Tests whether the player at the location has at least one move available.

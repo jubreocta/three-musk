@@ -83,8 +83,10 @@ def test_is_legal_move_by_musketeer():
 def test_is_legal_move_by_enemy():
     set_board(board)
     with pytest.raises(ValueError):
-        at((0,4))
-    assert is_legal_move_by_enemy((0,0),down)== True
+        is_legal_move_by_enemy((0,4),left)
+    assert is_legal_move_by_enemy((0,0),down)== False
+    set_board(board1)
+    assert is_legal_move_by_enemy((4,3),up)== True
     
 def test_is_legal_move():
     set_board(board)
