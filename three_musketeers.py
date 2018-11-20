@@ -94,10 +94,7 @@ def is_legal_move_by_musketeer(location, direction):
     if at(location)!='M':
         raise ValueError
     else:
-        if adjacent_location(location, direction)[0]<0 or\
-        adjacent_location(location, direction)[0]>4 or\
-        adjacent_location(location, direction)[1]<0 or\
-        adjacent_location(location, direction)[1]>4:
+        if is_legal_move(location,direction) is False:
             return False
         else:
             if at(adjacent_location(location, direction))== 'R':
@@ -112,10 +109,7 @@ def is_legal_move_by_enemy(location, direction):
     if at(location)!='R':
         raise ValueError
     else:
-        if adjacent_location(location, direction)[0]<0 or\
-        adjacent_location(location, direction)[0]>4 or\
-        adjacent_location(location, direction)[1]<0 or\
-        adjacent_location(location, direction)[1]>4:
+        if is_legal_move(location,direction) is False:
             return False
         else:
             if at(adjacent_location(location, direction))== '-':
@@ -131,7 +125,7 @@ def is_legal_move(location, direction):
         adjacent_location(location, direction)[0]>4 or\
         adjacent_location(location, direction)[1]<0 or\
         adjacent_location(location, direction)[1]>4:
-            return False
+        return False
     else:
         return True
 
@@ -139,16 +133,47 @@ def can_move_piece_at(location):
     """Tests whether the player at the location has at least one move available.
     You can assume that input will always be in correct range.
     You can assume that input will always be in correct range."""
-    return True
-
+    if at(location)=='R':
+        if is_legal_move_by_enemy(location, 'up') is True or\
+           is_legal_move_by_enemy(location, 'down') is True or\
+           is_legal_move_by_enemy(location, 'left') is True or\
+           is_legal_move_by_enemy(location, 'right') is True:
+            return True
+        else:
+            return False
+    elif at(location)=='M':
+        if is_legal_move_by_musketeer(location, 'up') is True or\
+           is_legal_move_by_musketeer(location, 'down') is True or\
+           is_legal_move_by_musketeer(location, 'left') is True or\
+           is_legal_move_by_musketeer(location, 'right') is True:
+            return True
+        else:
+            return False
 
 def has_some_legal_move_somewhere(who):
     """Tests whether a legal move exists for player "who" (which must
     be either 'M' or 'R'). Does not provide any information on where
     the legal move is.
     You can assume that input will always be in correct range."""
-    return True
-
+    a=[]
+    if who=='M':
+        for i in all_locations():
+            if at(i)=='M':
+                a.append(can_move_piece_at(i))
+        if True in a:
+            return True
+        else:
+            return False
+        a=[]
+    if who=='R':
+        for i in all_locations():
+            if at(i)=='R':
+                a.append(can_move_piece_at(i))
+        if True in a:
+            return True
+        else:
+            return False
+        a=[]
 def possible_moves_from(location):
     """Returns a list of directions ('left', etc.) in which it is legal
        for the player at location to move. If there is no player at
