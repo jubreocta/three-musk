@@ -94,8 +94,9 @@ def test_is_legal_move():
 
 def test_can_move_piece_at():
     set_board(board)
-    assert can_move_piece_at((0,0)) == True
-
+    assert can_move_piece_at((0,0)) == False
+    set_board(board1)
+    assert can_move_piece_at((4,3)) == True
 def test_has_some_legal_move_somewhere():
     set_board(board1)
     assert has_some_legal_move_somewhere('M') == True
