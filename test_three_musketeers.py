@@ -90,7 +90,9 @@ def test_is_legal_move_by_enemy():
     
 def test_is_legal_move():
     set_board(board)
-    assert is_legal_move((0,1),down) == True
+    assert is_legal_move((0,1),down) == False
+    set_board(board1)
+    assert is_legal_move((1,2),left) == True
 
 def test_can_move_piece_at():
     set_board(board)
@@ -106,23 +108,37 @@ def test_has_some_legal_move_somewhere():
 
 def test_possible_moves_from():
     set_board(board)
-    assert possible_moves_from((0,0)) == [right,down]
-
+    assert possible_moves_from((0,0)) == []
+    set_board(board1)
+    assert possible_moves_from((2,2)) == [up,left,right]
 def test_is_legal_location():
     set_board(board)
     assert is_legal_location((0,0)) == True
-
+    assert is_legal_location((5,0)) == False
+    assert is_legal_location((4,3)) == True
+    assert is_legal_location((2,7)) == False
 def test_is_within_board():
     set_board(board)
     assert is_within_board((0,0),down) == True
-
+    assert is_within_board((0,0),left) == False
+    assert is_within_board((4,2),up) == True
+    assert is_within_board((4,2),down) == False
 def test_all_possible_moves_for():
     set_board(board)
-    assert all_possible_moves_for(m) == [((0,4),left),((0,4),down),
-                                         ((2,2),down),((2,2),left),((2,2),right),((2,2),up),
+    assert all_possible_moves_for(m) == [((0,4),down),((0,4),left),
+                                         ((2,2),up),((2,2),down),((2,2),left),((2,2),right),
                                          ((4,0),up),((4,0),right)]
-                                          
-    
+    assert all_possible_moves_for(r) == []
+    set_board(board1)
+    assert all_possible_moves_for(M) == [((1,3),down),((1,3),left),
+                                         ((2,2),up),((2,2),left),
+                                         ((2,2),right)]
+    assert all_possible_moves_for(R) == [((1,2),up),((1,2),left),
+                                         ((2,1),up),((2,1),left),
+                                         ((2,3),down),((2,3),right),
+                                         ((3,1),down),((3,1),left),
+                                         ((3,1),right),((4,3),up),
+                                         ((4,3),left),((4,3),right)]
 def test_make_move():
     set_board(board)
     assert make_move((0,0), right) == (0,1)
