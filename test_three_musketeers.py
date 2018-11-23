@@ -141,15 +141,22 @@ def test_all_possible_moves_for():
                                          ((4,3),left),((4,3),right)]
 def test_make_move():
     set_board(board)
-    assert make_move((0,0), right) == (0,1)
+    make_move((0,4), down)
+    assert get_board()[0][4]=='-'
+    assert get_board()[1][4]=='M'
+    make_move((0,3),right)
+    assert get_board()[0][3]=='-'
+    assert get_board()[0][4]=='R'
     
 def test_choose_computer_move():
     set_board(board)
-    assert choose_computer_move(m) == ((0,0),right)
+    assert choose_computer_move(m) == ((0,4),down)
 
 def test_is_enemy_win():
     set_board(board)
     assert is_enemy_win() == False
-    
-
+    set_board(board1)
+    assert is_enemy_win() == False
+    make_move((2,2),right)
+    assert is_enemy_win() == True
 

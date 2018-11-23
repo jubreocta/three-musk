@@ -220,18 +220,37 @@ def make_move(location, direction):
     """Moves the piece in location in the indicated direction.
     Doesn't check if the move is legal. You can assume that input will always
     be in correct range."""
-    return ()
-
+    #need to copy board so changes dont permanently change original board
+    import copy
+    a=copy.deepcopy(board)
+    if at(location)=='M':
+        a[location[0]][location[1]]='-'
+        a[adjacent_location(location, direction)[0]]\
+        [adjacent_location(location, direction)[1]]='M'
+    if at(location)=='R':
+        a[location[0]][location[1]]='-'
+        a[adjacent_location(location, direction)[0]]\
+        [adjacent_location(location, direction)[1]]='R'
+    set_board(a)
+    
 def choose_computer_move(who):
     """The computer chooses a move for a Musketeer (who = 'M') or an
        enemy (who = 'R') and returns it as the tuple (location, direction),
        where a location is a (row, column) tuple as usual.
        You can assume that input will always be in correct range."""
-    return ((0,0), 'up')
+    
+    return all_possible_moves_for(who)[0]
 
 def is_enemy_win():
     """Returns True if all 3 Musketeers are in the same row or column."""
-    return True
+    a=[]
+    for i in all_locations():
+        if at(i)=='M':
+            a.append(i)
+    if a[0][0]==a[1][0]==a[2][0] or a[0][1]==a[1][1]==a[2][1]:
+        return True
+    else:
+        return False
 
 #---------- Communicating with the user ----------
 #----you do not need to modify code below unless you find a bug
@@ -350,3 +369,4 @@ def start():
         else:
             print("The Musketeers win!")
             break
+start()
