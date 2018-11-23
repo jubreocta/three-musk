@@ -105,7 +105,10 @@ def test_has_some_legal_move_somewhere():
     assert has_some_legal_move_somewhere('R') == True
     # Eventually put at least three additional tests here
     # with at least one additional board
-
+    set_board(board)
+    assert has_some_legal_move_somewhere('M') == True
+    assert has_some_legal_move_somewhere('R') == False
+    
 def test_possible_moves_from():
     set_board(board)
     assert possible_moves_from((0,0)) == []

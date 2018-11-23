@@ -94,11 +94,13 @@ def is_legal_move_by_musketeer(location, direction):
     if at(location)!='M':
         raise ValueError
     else:
-        if at(adjacent_location(location, direction))== 'R':
-            return True
+        if is_within_board(location, direction):
+            if at(adjacent_location(location, direction))== 'R':
+                return True
+            else:
+                return False
         else:
             return False
-
 def is_legal_move_by_enemy(location, direction):
     """Tests if the enemy at the location can move in the direction.
     You can assume that input will always be in correct range. Raises
@@ -106,8 +108,11 @@ def is_legal_move_by_enemy(location, direction):
     if at(location)!='R':
         raise ValueError
     else:
-        if at(adjacent_location(location, direction))== '-':
-            return True
+        if is_within_board(location, direction):
+            if at(adjacent_location(location, direction))== '-':
+                return True
+            else:
+                return False
         else:
             return False
 
@@ -369,4 +374,3 @@ def start():
         else:
             print("The Musketeers win!")
             break
-start()
