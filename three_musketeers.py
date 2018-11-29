@@ -147,7 +147,8 @@ def can_move_piece_at(location):
             return True
         else:
             return False
-
+    else:
+        return False
 def has_some_legal_move_somewhere(who):
     """Tests whether a legal move exists for player "who" (which must
     be either 'M' or 'R'). Does not provide any information on where
@@ -243,7 +244,9 @@ def choose_computer_move(who):
        enemy (who = 'R') and returns it as the tuple (location, direction),
        where a location is a (row, column) tuple as usual.
        You can assume that input will always be in correct range."""
-    
+    #computer awlays plays the first move available
+    #which is the piece with the lowest row number,lowest column number
+    #followed by up,down, left,right. whichever is available first.
     return all_possible_moves_for(who)[0]
 
 def is_enemy_win():
