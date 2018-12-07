@@ -66,6 +66,7 @@ def test_create_board():
     assert at((4,3)) == R
     assert at((4,4)) == R
     assert get_board() == board
+    
 def test_set_board():
     set_board(board1)
     assert at((0,0)) == _
@@ -73,11 +74,22 @@ def test_set_board():
     assert at((1,3)) == M
     assert at((4,0)) == _
     assert at((4,3)) == R
-    #eventually add some board2 and at least 3 tests with it
     set_board(board)
     assert at((0,0)) == R
     assert at((2,2)) == M
     assert at((1,3)) == R
+    assert at((4,0)) == M
+    assert at((4,3)) == R
+    set_board(board2)
+    assert at((0,0)) == _
+    assert at((1,2)) == _
+    assert at((1,3)) == R
+    assert at((4,0)) == M
+    assert at((4,3)) == R
+    set_board(board3)
+    assert at((0,0)) == _
+    assert at((2,2)) == R
+    assert at((1,3)) == _
     assert at((4,0)) == M
     assert at((4,3)) == R
 
@@ -86,10 +98,13 @@ def test_set_board():
 def test_get_board():
     set_board(board1)
     assert board1 == get_board()
-    #eventually add at least one more test with another board
     set_board(board)
     assert board == get_board()
-
+    set_board(board2)
+    assert board2 == get_board()
+    set_board(board3)
+    assert board3 == get_board()
+    
 def test_string_to_location():
     with pytest.raises(ValueError):
         string_to_location('X3')
@@ -168,7 +183,20 @@ def test_at():
     assert at((2,3)) == R
     assert at((3,1)) == R
     assert at((4,0)) == _
+    set_board(board2)
+    assert at((0,0)) == _
+    assert at((1,0)) == _
+    assert at((2,2)) == _
+    assert at((3,1)) == M
+    assert at((4,0)) == M
 
+    set_board(board3)
+    assert at((0,0)) == _
+    assert at((1,3)) == _
+    assert at((2,3)) == _
+    assert at((3,1)) == _
+    assert at((4,0)) == M
+    
 def test_all_locations():
     set_board(board)
     #creating a list of tuples of all locations
@@ -191,12 +219,25 @@ def test_adjacent_location():
     assert adjacent_location((4,4),left)== (4,3)
     assert adjacent_location((4,4),up)== (3,4)
     assert adjacent_location((2,2),right)== (2,3)
+    set_board(board1)
     assert adjacent_location((2,2),down)== (3,2)
     assert adjacent_location((2,2),left)== (2,1)
     assert adjacent_location((2,2),up)== (1,2)
     assert adjacent_location((3,1),right)== (3,2)
     assert adjacent_location((1,0),up)== (0,0)
-    
+    set_board(board2)
+    assert adjacent_location((0,1),right)== (0,2)
+    assert adjacent_location((1,0),down)== (2,0)
+    assert adjacent_location((4,3),left)== (4,2)
+    assert adjacent_location((3,4),up)== (2,4)
+    assert adjacent_location((2,1),right)== (2,2)
+    set_board(board3)
+    assert adjacent_location((3,2),down)== (4,2)
+    assert adjacent_location((2,4),left)== (2,3)
+    assert adjacent_location((4,2),up)== (3,2)
+    assert adjacent_location((3,2),right)== (3,3)
+    assert adjacent_location((1,1),up)== (0,1)
+        
 def test_is_legal_move_by_musketeer():
     set_board(board)
     with pytest.raises(ValueError):
@@ -213,7 +254,7 @@ def test_is_legal_move_by_musketeer():
     set_board(board1)
     with pytest.raises(ValueError):
         is_legal_move_by_musketeer((0,0), down)
-        is_legal_move_by_musketeer((2,2), left)
+        is_legal_move_by_musketeer((2,1), left)
         is_legal_move_by_musketeer((4,4), up)
         is_legal_move_by_musketeer((3,3), right)
         is_legal_move_by_musketeer((1,1), down)
@@ -222,6 +263,30 @@ def test_is_legal_move_by_musketeer():
     assert is_legal_move_by_musketeer((1,3),down)== True
     assert is_legal_move_by_musketeer((1,3),right)== False
     assert is_legal_move_by_musketeer((2,2),down)== False
+    set_board(board2)
+    with pytest.raises(ValueError):
+        is_legal_move_by_musketeer((0,4), down)
+        is_legal_move_by_musketeer((3,0), left)
+        is_legal_move_by_musketeer((4,1), up)
+        is_legal_move_by_musketeer((3,3), up)
+        is_legal_move_by_musketeer((3,2), right)
+    assert is_legal_move_by_musketeer((3,1),down)== True
+    assert is_legal_move_by_musketeer((4,0),right)== True
+    assert is_legal_move_by_musketeer((3,4),down)== True
+    assert is_legal_move_by_musketeer((3,4),right)== False
+    assert is_legal_move_by_musketeer((3,1),up)== False
+    set_board(board3)
+    with pytest.raises(ValueError):
+        is_legal_move_by_musketeer((0,1), down)
+        is_legal_move_by_musketeer((1,0), down)
+        is_legal_move_by_musketeer((4,1), left)
+        is_legal_move_by_musketeer((3,2), up)
+        is_legal_move_by_musketeer((4,4), right)
+    assert is_legal_move_by_musketeer((1,1),up)== True
+    assert is_legal_move_by_musketeer((3,3),left)== False
+    assert is_legal_move_by_musketeer((3,3),right)== True
+    assert is_legal_move_by_musketeer((4,0),right)== False
+    assert is_legal_move_by_musketeer((4,0),down)== False
     
 def test_is_legal_move_by_enemy():
     set_board(board)
@@ -237,11 +302,41 @@ def test_is_legal_move_by_enemy():
     assert is_legal_move_by_enemy((4,1),left)== False
     assert is_legal_move_by_enemy((1,1),down)== False
     set_board(board1)
+    with pytest.raises(ValueError):
+        is_legal_move_by_enemy((0,4),left)
+        is_legal_move_by_enemy((1,3),down)
+        is_legal_move_by_enemy((2,2),up)
+        is_legal_move_by_enemy((2,4),right)
+        is_legal_move_by_enemy((4,1),left)
     assert is_legal_move_by_enemy((4,3),up)== True
     assert is_legal_move_by_enemy((3,1),up)== False
     assert is_legal_move_by_enemy((3,1),right)== True
     assert is_legal_move_by_enemy((2,1),left)== True
     assert is_legal_move_by_enemy((1,2),up)== True
+    set_board(board2)
+    with pytest.raises(ValueError):
+        is_legal_move_by_enemy((0,4),left)
+        is_legal_move_by_enemy((1,4),down)
+        is_legal_move_by_enemy((2,2),up)
+        is_legal_move_by_enemy((2,3),right)
+        is_legal_move_by_enemy((4,1),left)
+    assert is_legal_move_by_enemy((4,3),down)== False
+    assert is_legal_move_by_enemy((2,0),up)== True
+    assert is_legal_move_by_enemy((4,4),right)== False
+    assert is_legal_move_by_enemy((4,1),left)== False
+    assert is_legal_move_by_enemy((4,1),right)== True
+    set_board(board3)
+    with pytest.raises(ValueError):
+        is_legal_move_by_enemy((0,3),left)
+        is_legal_move_by_enemy((1,1),down)
+        is_legal_move_by_enemy((2,1),up)
+        is_legal_move_by_enemy((3,3),right)
+        is_legal_move_by_enemy((4,1),left)
+    assert is_legal_move_by_enemy((4,3),up)== False
+    assert is_legal_move_by_enemy((2,2),up)== False
+    assert is_legal_move_by_enemy((1,4),up)== True
+    assert is_legal_move_by_enemy((1,4),left)== True
+    assert is_legal_move_by_enemy((1,0),down)== True
     
 def test_is_legal_move():
     set_board(board)
@@ -256,6 +351,18 @@ def test_is_legal_move():
     assert is_legal_move((2,3),up) == False
     assert is_legal_move((3,1),right) == True
     assert is_legal_move((0,1),down) == False
+    set_board(board2)
+    assert is_legal_move((0,3),down) == False
+    assert is_legal_move((0,4),left) == True
+    assert is_legal_move((2,2),right) == False
+    assert is_legal_move((3,1),down) == True
+    assert is_legal_move((4,3),left) == True
+    set_board(board3)
+    assert is_legal_move((0,1),left) == True
+    assert is_legal_move((1,1),left) == True
+    assert is_legal_move((2,2),up) == False
+    assert is_legal_move((0,2),right) == True
+    assert is_legal_move((4,4),down) == False
     
 def test_can_move_piece_at():
     set_board(board)
@@ -270,6 +377,18 @@ def test_can_move_piece_at():
     assert can_move_piece_at((1,1)) == False
     assert can_move_piece_at((0,3)) == False
     assert can_move_piece_at((1,3)) == True
+    set_board(board2)
+    assert can_move_piece_at((1,3)) == True
+    assert can_move_piece_at((0,4)) == True
+    assert can_move_piece_at((4,4)) == False
+    assert can_move_piece_at((3,1)) == True
+    assert can_move_piece_at((3,3)) == True
+    set_board(board3)
+    assert can_move_piece_at((0,1)) == True
+    assert can_move_piece_at((2,2)) == True
+    assert can_move_piece_at((4,0)) == False
+    assert can_move_piece_at((4,4)) == False
+    assert can_move_piece_at((1,4)) == True
     
 def test_has_some_legal_move_somewhere():
     set_board(board1)
@@ -280,6 +399,12 @@ def test_has_some_legal_move_somewhere():
     set_board(board)
     assert has_some_legal_move_somewhere('M') == True
     assert has_some_legal_move_somewhere('R') == False
+    set_board(board2)
+    assert has_some_legal_move_somewhere('M') == True
+    assert has_some_legal_move_somewhere('R') == True
+    set_board(board3)
+    assert has_some_legal_move_somewhere('M') == True
+    assert has_some_legal_move_somewhere('R') == True
     
 def test_possible_moves_from():
     set_board(board)
@@ -294,6 +419,18 @@ def test_possible_moves_from():
     assert possible_moves_from((1,3)) == [down,left]
     assert possible_moves_from((2,1)) == [up,left]
     assert possible_moves_from((0,0)) == []
+    set_board(board2)
+    assert possible_moves_from((1,3)) == [up,down,left,right]
+    assert possible_moves_from((0,4)) == [down,left]
+    assert possible_moves_from((3,1)) == [down]
+    assert possible_moves_from((3,4)) == [down,left]
+    assert possible_moves_from((4,4)) == []
+    set_board(board3)
+    assert possible_moves_from((2,2)) == [down,left,right]
+    assert possible_moves_from((3,3)) == [down,right]
+    assert possible_moves_from((1,2)) == [right]
+    assert possible_moves_from((4,0)) == []
+    assert possible_moves_from((3,4)) == []
     
 def test_is_legal_location():
     set_board(board)
@@ -302,6 +439,7 @@ def test_is_legal_location():
     assert is_legal_location((4,3)) == True
     assert is_legal_location((2,7)) == False
     assert is_legal_location((2,4)) == True
+    set_board(board2)
     assert is_legal_location((4,4)) == True
     assert is_legal_location((5,5)) == False
     assert is_legal_location((7,0)) == False
@@ -316,6 +454,7 @@ def test_is_within_board():
     assert is_within_board((4,2),up) == True
     assert is_within_board((4,2),down) == False
     assert is_within_board((2,2),down) == True
+    set_board(board3)
     assert is_within_board((1,4),right) == False
     assert is_within_board((2,1),left) == True
     assert is_within_board((0,3),up) == False
@@ -338,6 +477,22 @@ def test_all_possible_moves_for():
                                          ((3,1),down),((3,1),left),
                                          ((3,1),right),((4,3),up),
                                          ((4,3),left),((4,3),right)]
+    set_board(board2)
+    assert all_possible_moves_for(M) == [((3,1),down),((3,4),down),
+                                         ((3,4),left),((4,0),right)]
+    assert all_possible_moves_for(R) == [((0,4),down),((0,4),left),((1,3),up),
+                                         ((1,3),down),((1,3),left),((1,3),right),
+                                         ((2,0),up),((2,0),down),((2,0),right),
+                                         ((3,3),up),((3,3),left),((4,1),right),
+                                         ((4,3),left)]
+    set_board(board3)
+    assert all_possible_moves_for(M) == [((1,1),up),((1,1),left),((1,1),right),
+                                         ((3,3),down),((3,3),right)]
+    assert all_possible_moves_for(R) == [((0,1),left),((0,2),right),((1,0),up),
+                                         ((1,0),down),((1,2),right),((1,4),up),
+                                         ((1,4),left),((2,2),down),((2,2),left),
+                                         ((2,2),right),((2,4),left),((4,3),left)]
+    
 def test_make_move():
     set_board(board)
     make_move((0,4), down)
@@ -353,6 +508,20 @@ def test_make_move():
     make_move((2,3),right)
     assert get_board()[2][3]=='-'
     assert get_board()[2][4]=='R'
+    set_board(board2)
+    make_move((3,4), down)
+    assert get_board()[3][4]=='-'
+    assert get_board()[4][4]=='M'
+    make_move((4,3),left)
+    assert get_board()[4][3]=='-'
+    assert get_board()[4][2]=='R'
+    set_board(board3)
+    make_move((1,1), left)
+    assert get_board()[1][1]=='-'
+    assert get_board()[1][0]=='M'
+    make_move((1,4),up)
+    assert get_board()[1][4]=='-'
+    assert get_board()[0][4]=='R'
     
 def test_choose_computer_move():
     set_board(board)
@@ -361,9 +530,18 @@ def test_choose_computer_move():
     assert choose_computer_move(r) == ((0,3),right)
     set_board(board1)
     assert choose_computer_move(m) == ((1,3),down)
-    make_move((1,3),down)
     assert choose_computer_move(r) == ((1,2),up)
-
+    set_board(board2)
+    assert choose_computer_move(m) == ((3,1),down)
+    assert choose_computer_move(r) == ((0,4),down)
+    set_board(board3)
+    assert choose_computer_move(m) == ((1,1),up)
+    assert choose_computer_move(r) == ((0,1),left)
+    #repeating the same musketeer move above but making it changes enemy move
+    set_board(board3)
+    assert choose_computer_move(m) == ((1,1),up)
+    make_move((1,1),up)
+    assert choose_computer_move(r) == ((0,2),right)
 def test_is_enemy_win():
     set_board(board)
     assert is_enemy_win() == False
@@ -371,4 +549,10 @@ def test_is_enemy_win():
     assert is_enemy_win() == False
     make_move((2,2),right)
     assert is_enemy_win() == True
+    set_board(board2)
+    assert is_enemy_win() == False
+    make_move((4,0),up)
+    assert is_enemy_win() == True
+    set_board(board3)
+    assert is_enemy_win() == False
 
