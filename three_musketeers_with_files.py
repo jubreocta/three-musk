@@ -377,4 +377,22 @@ def start():
         else:
             print("The Musketeers win!")
             break
-start()
+
+#
+#
+##
+###
+####
+#####
+#first question is to know if user wants to load a game or start a new game
+
+def load_or_new():
+    choice = input("Would you like to load a game (L) or start a new game (N)? ")
+    if choice[0].upper() == "L":
+        return 'L'
+    elif choice[0].upper() == "N":
+        return "N"
+    else:
+        load_or_new()
+
+            
