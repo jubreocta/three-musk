@@ -355,11 +355,32 @@ def describe_move(who, location, direction):
           location_to_string(location), 'to',\
           location_to_string(new_location) + ".\n")
 
+#
+#
+##
+###
+####
+#####
+#first question is to know if user wants to load a game or start a new game
+
+def choose_load_or_new():
+    choice = input("Would you like to load a game (L) or start a new game (N)? ")
+    if choice[0].upper() == "L":
+        return 'L'
+    elif choice[0].upper() == "N":
+        return "N"
+    else:
+        choose_load_or_new()
+            
+#next we need to edit the start function to act based on choose_load_or _new
 def start():
     """Plays the Three Musketeers Game."""
-    load_or_new = load_or_new()
-    users_side = choose_users_side()
-    board = create_board()
+    load_or_new = choose_load_or_new()
+    if load_or_new == 'N':
+        users_side = choose_users_side()
+        board = create_board()
+    else:
+        board == loaded_board()
     print_instructions()
     print_board()
     while True:
@@ -377,23 +398,45 @@ def start():
             print_board()
         else:
             print("The Musketeers win!")
+
+
             break
 
-#
-#
-##
-###
-####
-#####
-#first question is to know if user wants to load a game or start a new game
 
-def load_or_new():
-    choice = input("Would you like to load a game (L) or start a new game (N)? ")
-    if choice[0].upper() == "L":
-        return 'L'
-    elif choice[0].upper() == "N":
-        return "N"
-    else:
-        load_or_new()
-
+#now we need to create a way to first save and then load board
+#save boards
+#we edit get_users_move to take inputs save,new game, load game
+def get_users_move():
+    """Gets a legal move from the user, and returns it as a
+       (location, direction) tuple."""    
+    directions = {'L':'left', 'R':'right', 'U':'up', 'D':'down'}
+    print('Enter (S) to save this game, (N) to load a new game or make your move')
+    move = input("Your move? ").upper().replace(' ', '')
+    if (len(move) >= 3
+            and move[0] in 'ABCDE'
+            and move[1] in '12345'
+            and move[2] in 'LRUD'):
+        location = string_to_location(move[0:2])
+        direction = directions[move[2]]
+        if is_legal_move(location, direction):
+            return (location, direction)
+    elif move[0] == 'N':
+        sure = input("Are you sure you want to load a new game?You current game will be lost!!!Yes(Y)/No(N)??").upper()
+        if sure == 'Y':
+            start()
+        else:
+            get_users_move()
+    elif move[0] == 'S':
+        sure = input("Are you sure you want to save this game?Yes(Y)/No(N)??").upper()
+        if sure == 'Y':
+            save_board()
+        else:
+            get_users_move()
             
+    print("Illegal move--'" + move + "'")
+    return get_users_move()
+
+
+#now we need to define save board
+def save_board():
+    
