@@ -357,6 +357,7 @@ def describe_move(who, location, direction):
 
 def start():
     """Plays the Three Musketeers Game."""
+    load_or_new = load_or_new()
     users_side = choose_users_side()
     board = create_board()
     print_instructions()
