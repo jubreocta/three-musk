@@ -427,16 +427,21 @@ def get_users_move():
         else:
             get_users_move()
     elif move[0] == 'S':
-        sure = input("Are you sure you want to save this game?Yes(Y)/No(N)??").upper()
+        sure = input("Are you sure you want to save this game and continue? Yes(Y)/No(N)??").upper()
         if sure == 'Y':
             save_board()
+            get_users_move()
         else:
             get_users_move()
-            
-    print("Illegal move--'" + move + "'")
-    return get_users_move()
+    else:      
+        print("Illegal move--'" + move + "'")
+        return get_users_move()
 
 
 #now we need to define save board
 def save_board():
-    
+    outfile = open('C:/Users/Owner/Desktop/boards.txt','w')
+    outfile.write(str(get_board()))
+    outfile.close()
+
+#we need to define how to load a game
