@@ -364,13 +364,12 @@ def describe_move(who, location, direction):
 #first question is to know if user wants to load a game or start a new game
 
 def choose_load_or_new():
-    choice = input("Would you like to load a game (L) or start a new game (N)? ")
-    if choice[0].upper() == "L":
-        return 'L'
-    elif choice[0].upper() == "N":
-        return "N"
-    else:
-        choose_load_or_new()
+    a = False
+    while a == False:
+        choice = input("Would you like to load a game (L) or start a new game (N)? ")
+        if choice[0].upper() == "L" or choice[0].upper()=='N':
+            return choice[0].upper()
+            a== True
             
 #next we need to edit the start function to act based on choose_load_or _new
 def start():
@@ -380,7 +379,8 @@ def start():
         users_side = choose_users_side()
         board = create_board()
     else:
-        board == loaded_board()
+        users_side = choose_users_side()
+        board = load_board()
     print_instructions()
     print_board()
     while True:
@@ -420,6 +420,9 @@ def get_users_move():
         direction = directions[move[2]]
         if is_legal_move(location, direction):
             return (location, direction)
+        else:      
+            print("Illegal move--'" + move + "'")
+            return get_users_move()
     elif move[0] == 'N':
         sure = input("Are you sure you want to load a new game?You current game will be lost!!!Yes(Y)/No(N)??").upper()
         if sure == 'Y':
@@ -440,8 +443,23 @@ def get_users_move():
 
 #now we need to define save board
 def save_board():
-    outfile = open('C:/Users/Owner/Desktop/boards.txt','w')
-    outfile.write(str(get_board()))
+    outfile = open('boards.txt','w')
+    a= get_board()
+    b=''
+    for i in a:
+        for j in i:
+            b+=j
+    outfile.write(b)
     outfile.close()
 
 #we need to define how to load a game
+def load_board():
+    infile = open('boards.txt','r')
+    a = infile.readline()
+    infile.close()
+    c=[]
+    for i in range(5):
+        b=[a[i] for i in range(5)]
+        a=a[5:]
+        c.append(b)
+    set_board(c)
