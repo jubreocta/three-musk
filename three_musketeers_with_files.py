@@ -355,17 +355,15 @@ def choose_load_or_new():
         choice = choice.strip()
         if choice != '':
             a = choice[0].upper()
-    return a
-#next we need to edit the start function to act based on choose_load_or _new
-def start():
-    """Plays the Three Musketeers Game."""
-    load_or_new = choose_load_or_new()
-    if load_or_new == 'N':
-        users_side = choose_users_side()
+    if a == 'N':
         board = create_board()
     else:
         board = load_board()
-        users_side = choose_users_side()
+#next we need to edit the start function to act based on choose_load_or _new
+def start():
+    """Plays the Three Musketeers Game."""
+    board = choose_load_or_new()
+    users_side = choose_users_side()
     print_instructions()
     print_board()
     while True:
@@ -383,8 +381,6 @@ def start():
             print_board()
         else:
             print("The Musketeers win!")
-
-
             break
 
 
@@ -452,6 +448,7 @@ def save_board():
     outfile.close()
 
 def load_board():
+    #sets board as a saved board and returns M or R as users side
     try:
         infile = open('boards.txt','r')
         a = infile.readlines()
@@ -476,4 +473,5 @@ def load_board():
     except:
         print('There is no saved game!')
         create_board()
-start()
+#next we need to find a way to delete saved games
+        
