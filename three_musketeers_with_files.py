@@ -289,6 +289,7 @@ For convenience in typing, you may use lowercase letters.""")
 
 def choose_users_side():
     """Returns 'M' if user is playing Musketeers, 'R' otherwise."""
+    global user
     user = ""
     while user != 'M' and user != 'R':
         answer = input("Would you like to play Musketeer (M) or enemy (R)? ")
@@ -296,22 +297,6 @@ def choose_users_side():
         if answer != "":
             user = answer.upper()[0]
     return user
-
-def get_users_move():
-    """Gets a legal move from the user, and returns it as a
-       (location, direction) tuple."""    
-    directions = {'L':'left', 'R':'right', 'U':'up', 'D':'down'}
-    move = input("Your move? ").upper().replace(' ', '')
-    if (len(move) >= 3
-            and move[0] in 'ABCDE'
-            and move[1] in '12345'
-            and move[2] in 'LRUD'):
-        location = string_to_location(move[0:2])
-        direction = directions[move[2]]
-        if is_legal_move(location, direction):
-            return (location, direction)
-    print("Illegal move--'" + move + "'")
-    return get_users_move()
 
 def move_musketeer(users_side):
     """Gets the Musketeer's move (from either the user or the computer)
@@ -379,8 +364,8 @@ def start():
         users_side = choose_users_side()
         board = create_board()
     else:
-        users_side = choose_users_side()
         board = load_board()
+        users_side = choose_users_side()
     print_instructions()
     print_board()
     while True:
@@ -426,16 +411,16 @@ def get_users_move():
     elif move[0] == 'N':
         sure = input("Are you sure you want to load a new game?You current game will be lost!!!Yes(Y)/No(N)??").upper()
         if sure == 'Y':
-            start()
+            return start()
         else:
-            get_users_move()
+            return get_users_move()
     elif move[0] == 'S':
         sure = input("Are you sure you want to save this game and continue? Yes(Y)/No(N)??").upper()
         if sure == 'Y':
             save_board()
-            get_users_move()
+            return get_users_move()
         else:
-            get_users_move()
+            return get_users_move()
     else:      
         print("Illegal move--'" + move + "'")
         return get_users_move()
@@ -460,34 +445,35 @@ def save_board():
     name=input('Input the name you want to save this game as. ')
     outfile.write(name)
     outfile.write('\n')
+    outfile.write(user)
+    outfile.write('\n')
     outfile.write(b)
     outfile.write('\n')
     outfile.close()
 
-infile = open('boards.txt','r')
-a = infile.readlines()
-infile.close()
-print(a)
-
 def load_board():
-    infile = open('boards.txt','r')
-    a = infile.readlines()
-    infile.close()
-    print('Which saved game do you want to load??')
-    for i in range(0,len(a),2):
-        print(a[i])
-    b=None
-    while b not in a:
-        choice = input('???')
-        if choice != '':
-            b = choice + '\n'
-    board_index = a.index(b)+1
-    board_letters = a[board_index].strip()
-    needed_board = []
-    for i in range(5):
-        c=[board_letters[i] for i in range(5)]
-        board_letters=board_letters[5:]
-        needed_board.append(c)
-    #set_board(d)
-    print(needed_board)
-load_board()
+    try:
+        infile = open('boards.txt','r')
+        a = infile.readlines()
+        infile.close()
+        print('Which of your saved games do you want to load??')
+        for i in range(0,len(a),3):
+            print('%15s' % a[i])
+        b=None
+        while b not in a:
+            choice = input('???')
+            if choice != '':
+                b = choice + '\n'
+        board_index = a.index(b)+2
+        board_letters = a[board_index].strip()
+        needed_board = []
+        for i in range(5):
+            c=[board_letters[i] for i in range(5)]
+            board_letters=board_letters[5:]
+            needed_board.append(c)
+        set_board(needed_board)
+        print('You saved this game playing as %s' % a[a.index(b)+1])
+    except:
+        print('There is no saved game!')
+        create_board()
+start()
