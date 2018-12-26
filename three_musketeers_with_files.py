@@ -365,7 +365,6 @@ def choose_load_or_new():
 def start():
     """Plays the Three Musketeers Game."""
     board = choose_load_or_new()
-    print(board)
     users_side = choose_users_side()
     print_instructions()
     print_board()
@@ -478,28 +477,58 @@ def load_board():
         infile = open('boards.txt','r')
         a = infile.readlines()
         infile.close()
-        for i in range(0,len(a),3):
-            print('%15s' % a[i])
-        b=None
-        while b not in a:
-            print('Which of your saved games do you want to load??')
-            choice = input('???')
-            if choice != '':
-                b = choice + '\n'
-        board_index = a.index(b)+2
-        board_letters = a[board_index].strip()
-        needed_board = []
-        for i in range(5):
-            c=[board_letters[i] for i in range(5)]
-            board_letters=board_letters[5:]
-            needed_board.append(c)
-        set_board(needed_board)
-        you_played_as = a[a.index(b)+1]
-        print('You saved this game playing as %s' % you_played_as)
-        return you_played_as
+        if len(a)>1:
+            for i in range(0,len(a),3):
+                print('%15s' % a[i])
+            b=None
+            while b not in a:
+                print('Which of your saved games do you want to load??')
+                choice = input('???')
+                if choice != '':
+                    b = choice + '\n'
+            #choose whether to load or delete a game
+            print("Do you want to load(L) or delete(D) game " + choice)
+            answer= input().upper()
+            while answer != 'L' and answer != 'D':
+                answer = input("Type 'L' to load or 'D' to Delete "+choice+" followed by Enter!! ")
+                answer = answer.upper()
+            if answer == 'L':
+                board_index = a.index(b)+2
+                board_letters = a[board_index].strip()
+                needed_board = []
+                for i in range(5):
+                    c=[board_letters[i] for i in range(5)]
+                    board_letters=board_letters[5:]
+                    needed_board.append(c)
+                set_board(needed_board)
+                you_played_as = a[a.index(b)+1]
+                print('You saved this game playing as %s' % you_played_as)
+                return you_played_as
+            elif answer == 'D':
+                sure = input("Are you sure you want to delete " + choice+ "!!!Yes(Y)/No(N)??").upper()
+                if sure == 'Y':
+                    delete_board(a.index(b))
+                    return load_board()
+                else:
+                    return load_board()
+        else:
+            print('There is no saved game!')
+            create_board()
+            return 'M'
     except:
         print('There is no saved game!')
         create_board()
         return 'M'
     #we return what you played as so we can dictate which side plays next
-
+def delete_board(remove_index):
+    infile = open('boards.txt','r')
+    a = infile.readlines()
+    infile.close()
+    a.pop(remove_index+2)
+    a.pop(remove_index+1)
+    a.pop(remove_index)
+    outfile = open('boards.txt','w')
+    for i in a:
+        outfile.write(i)
+    outfile.close()
+start()
