@@ -288,8 +288,8 @@ For convenience in typing, you may use lowercase letters.""")
     print()
 
 def choose_users_side():
-    """Returns 'M' if user is playing Musketeers, 'R' otherwise."""
     global user
+    """Returns 'M' if user is playing Musketeers, 'R' otherwise."""
     user = ""
     while user != 'M' and user != 'R':
         answer = input("Would you like to play Musketeer (M) or enemy (R)? ")
@@ -357,32 +357,52 @@ def choose_load_or_new():
             a = choice[0].upper()
     if a == 'N':
         board = create_board()
+        return 'M'
     else:
         board = load_board()
+        return board
 #next we need to edit the start function to act based on choose_load_or _new
 def start():
     """Plays the Three Musketeers Game."""
     board = choose_load_or_new()
+    print(board)
     users_side = choose_users_side()
     print_instructions()
     print_board()
-    while True:
-        if has_some_legal_move_somewhere('M'):
-            board = move_musketeer(users_side)
-            print_board()
-            if is_enemy_win():
-                print("Cardinal Richleau's men win!")
+    if board == 'M':
+        while True:
+            if has_some_legal_move_somewhere('M'):
+                board = move_musketeer(users_side)
+                print_board()
+                if is_enemy_win():
+                    print("Cardinal Richleau's men win!")
+                    break
+            else:
+                print("The Musketeers win!")
                 break
-        else:
-            print("The Musketeers win!")
-            break
-        if has_some_legal_move_somewhere('R'):
-            board = move_enemy(users_side)
-            print_board()
-        else:
-            print("The Musketeers win!")
-            break
-
+            if has_some_legal_move_somewhere('R'):
+                board = move_enemy(users_side)
+                print_board()
+            else:
+                print("The Musketeers win!")
+                break
+    else:
+        while True:
+            if has_some_legal_move_somewhere('R'):
+                board = move_enemy(users_side)
+                print_board()
+            else:
+                print("The Musketeers win!")
+                break
+            if has_some_legal_move_somewhere('M'):
+                board = move_musketeer(users_side)
+                print_board()
+                if is_enemy_win():
+                    print("Cardinal Richleau's men win!")
+                    break
+            else:
+                print("The Musketeers win!")
+                break
 
 #now we need to create a way to first save and then load board
 #save boards
@@ -430,15 +450,20 @@ def get_users_move():
 def save_board():
     try:
         outfile = open('boards.txt','r+')
-        outfile.read()
+        written = outfile.read().split('\n')
+        written.pop()
     except:
         outfile = open('boards.txt','w')
+        written = []
     a= get_board()
     b=''
     for i in a:
         for j in i:
             b+=j
     name=input('Input the name you want to save this game as. ')
+    while name in written:
+        print('That name already exists!!Choose another name')
+        name= input()
     outfile.write(name)
     outfile.write('\n')
     outfile.write(user)
@@ -453,11 +478,11 @@ def load_board():
         infile = open('boards.txt','r')
         a = infile.readlines()
         infile.close()
-        print('Which of your saved games do you want to load??')
         for i in range(0,len(a),3):
             print('%15s' % a[i])
         b=None
         while b not in a:
+            print('Which of your saved games do you want to load??')
             choice = input('???')
             if choice != '':
                 b = choice + '\n'
@@ -469,9 +494,12 @@ def load_board():
             board_letters=board_letters[5:]
             needed_board.append(c)
         set_board(needed_board)
-        print('You saved this game playing as %s' % a[a.index(b)+1])
+        you_played_as = a[a.index(b)+1]
+        print('You saved this game playing as %s' % you_played_as)
+        return you_played_as
     except:
         print('There is no saved game!')
         create_board()
-#next we need to find a way to delete saved games
-        
+        return 'M'
+    #we return what you played as so we can dictate which side plays next
+
