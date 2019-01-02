@@ -364,11 +364,11 @@ def choose_load_or_new():
 #next we need to edit the start function to act based on choose_load_or _new
 def start():
     """Plays the Three Musketeers Game."""
-    board = choose_load_or_new()
+    played_as = choose_load_or_new()
     users_side = choose_users_side()
     print_instructions()
     print_board()
-    if board == 'M':
+    if played_as == 'M':
         while True:
             if has_some_legal_move_somewhere('M'):
                 board = move_musketeer(users_side)
@@ -385,7 +385,7 @@ def start():
             else:
                 print("The Musketeers win!")
                 break
-    else:
+    elif played_as == 'R':
         while True:
             if has_some_legal_move_somewhere('R'):
                 board = move_enemy(users_side)
@@ -402,9 +402,7 @@ def start():
             else:
                 print("The Musketeers win!")
                 break
-
 #now we need to create a way to first save and then load board
-#save boards
 #we edit get_users_move to take inputs save,new game, load game
 def get_users_move():
     """Gets a legal move from the user, and returns it as a
@@ -501,7 +499,7 @@ def load_board():
                     board_letters=board_letters[5:]
                     needed_board.append(c)
                 set_board(needed_board)
-                you_played_as = a[a.index(b)+1]
+                you_played_as = a[a.index(b)+1].strip()
                 print('You saved this game playing as %s' % you_played_as)
                 return you_played_as
             elif answer == 'D':
@@ -531,4 +529,3 @@ def delete_board(remove_index):
     for i in a:
         outfile.write(i)
     outfile.close()
-start()
