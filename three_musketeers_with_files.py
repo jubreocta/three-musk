@@ -288,6 +288,7 @@ For convenience in typing, you may use lowercase letters.""")
     print()
 
 def choose_users_side():
+    #we set user as global so that we can save the side that played last
     global user
     """Returns 'M' if user is playing Musketeers, 'R' otherwise."""
     user = ""
@@ -349,6 +350,9 @@ def describe_move(who, location, direction):
 #first question is to know if user wants to load a game or start a new game
 
 def choose_load_or_new():
+    '''user makes a choice whether to load or start a new game. it also returns
+        the string M or R that played last to determine which side plays next
+        in a game'''
     a = ''
     while a != 'L' and a!= 'N':
         choice = input("Would you like to load a game (L) or start a new game (N)? ")
@@ -363,12 +367,14 @@ def choose_load_or_new():
         return board
 #next we need to edit the start function to act based on choose_load_or _new
 def start():
+    '''start is edited to play M first if R played last (user last played as M)
+        and vice versa'''
     """Plays the Three Musketeers Game."""
-    played_as = choose_load_or_new()
+    last_played_as = choose_load_or_new()
     users_side = choose_users_side()
     print_instructions()
     print_board()
-    if played_as == 'M':
+    if last_played_as == 'M':
         while True:
             if has_some_legal_move_somewhere('M'):
                 board = move_musketeer(users_side)
@@ -385,7 +391,7 @@ def start():
             else:
                 print("The Musketeers win!")
                 break
-    elif played_as == 'R':
+    elif last_played_as == 'R':
         while True:
             if has_some_legal_move_somewhere('R'):
                 board = move_enemy(users_side)
@@ -406,7 +412,8 @@ def start():
 #we edit get_users_move to take inputs save,new game, load game
 def get_users_move():
     """Gets a legal move from the user, and returns it as a
-       (location, direction) tuple."""    
+       (location, direction) tuple. users move can also be S to save or N to
+       start a new game"""    
     directions = {'L':'left', 'R':'right', 'U':'up', 'D':'down'}
     print('Enter (S) to save this game, (N) to load a new game or make your move')
     move = input("Your move? ").upper().replace(' ', '')
@@ -445,6 +452,8 @@ def get_users_move():
 
 #edit load board and save board to take more files and be named
 def save_board():
+    '''saves board on a text file, saves the name of he board and side user
+        played as'''
     try:
         outfile = open('boards.txt','r+')
         written = outfile.read().split('\n')
@@ -470,6 +479,9 @@ def save_board():
     outfile.close()
 
 def load_board():
+    '''shows all saved games in the text file and gives the user the option
+        to either load or delete a saved game.loads a new game if there is no
+        saved game.also returns side user last played as'''
     #sets board as a saved board and returns M or R as users side
     try:
         infile = open('boards.txt','r')
@@ -506,7 +518,7 @@ def load_board():
                 sure = input("Are you sure you want to delete " + choice+ "!!!Yes(Y)/No(N)??").upper()
                 if sure == 'Y':
                     delete_board(a.index(b))
-                    return load_board()
+                    return start()
                 else:
                     return load_board()
         else:
@@ -519,6 +531,7 @@ def load_board():
         return 'M'
     #we return what you played as so we can dictate which side plays next
 def delete_board(remove_index):
+    '''deletes a saved game and all its information'''
     infile = open('boards.txt','r')
     a = infile.readlines()
     infile.close()
