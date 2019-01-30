@@ -1,0 +1,24 @@
+Total coursework mark: _20_  (out of 20)
+
+Exercise sheets mark:  10  (out of 10)
+
+Project mark:  _10_  (out of 10)
+
+Project feedback and mark details
+
+Correctness and adherence to specification:  _30_  (out of 30%)
+
+Seems Good
+
+Completeness of code, tests, and commit history:  _30_    (out of 30%)   
+
+commit history ok
+All tests work fine
+
+Coding style: _10_   (out of 10%) 
+
+Good
+
+Extension:  _30_     (out of 30%) 
+
+All Good
