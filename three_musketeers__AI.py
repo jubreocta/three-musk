@@ -265,6 +265,9 @@ def choose_computer_move_AI(who):
             if j[1]==i:
                 return j
     #ensures all played moves are in same direction as much as possible
+    #Option 1
+    #how much time will it take to find all the options playable and
+    #keep selecting the local option that satisfies the global optimum
 
 def is_enemy_win():
     """Returns True if all 3 Musketeers are in the same row or column."""
